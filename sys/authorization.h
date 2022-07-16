@@ -60,31 +60,6 @@ authorization_user_is_root(void) {
     return g_authorization_is_root;
 }
 
-/* --------------------------------------------------------------------------
- * ---- FUNCTION AUTHORIZATIONS ---------------------------------------------
- * -------------------------------------------------------------------------- */
-
-struct authorization_s {
-    void (*key_f) ();
-    bool (*chk_f) ();
-}; 
-
-AUTHORIZATION_ATTRS_GLOBAL struct authorization_s AUTHORIZATION_FUNCS[];
-
-#define authorization_check(FUNC,...) ({                                 \
-            void *key = (FUNC);                                          \
-            bool  ret = false;                                           \
-            if (AUTHORIZATION_FUNCS) {                                   \
-                for (int i=0; AUTHORIZATION_FUNCS[i].key_f; i++) {       \
-                    if (AUTHORIZATION_FUNCS[i].key_f == key) {           \
-                        ret = AUTHORIZATION_FUNCS[i].chk_f(__VA_ARGS__); \
-                        if (!ret) break;                                 \
-                    }                                                    \
-                }                                                        \
-            }                                                            \
-            ret;                                                         \
-        })
-
 
 
 #endif

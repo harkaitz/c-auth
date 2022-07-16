@@ -1,8 +1,10 @@
 #include "sys/authorization.h"
 #include <stdio.h>
 
+__attribute__((weak)) bool eat_cake_auth (int val1, const char *message);
+
 void eat_cake(int val1, const char *message) {
-    if (!authorization_check(eat_cake, val1, message)) return;
+    if (eat_cake_auth && !eat_cake_auth(val1, message)) return;
     fprintf(stdout, "%i: Ate a cake, %s\n", val1, message);
 }
 
@@ -14,11 +16,6 @@ bool eat_cake_auth (int val1, const char *message) {
         return true;
     }
 }
-
-struct authorization_s AUTHORIZATION_FUNCS[] = {
-    { eat_cake, eat_cake_auth },
-    { NULL    , NULL}
-};
 
 int main (void) {
     eat_cake(1, "mmmmm");
